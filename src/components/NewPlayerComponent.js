@@ -4,7 +4,7 @@ class NewPlayerComponent extends React.Component {
   createPlayer(event) {
     event.preventDefault();
     console.log("Create Player Called!");
-    let newPlayer = this.refs.playerName.value;
+    let newPlayer = this.refs.playerName.getValue();
     this.props.onCreate(newPlayer);
     this.refs.playerName.value = "";
   }

@@ -5,6 +5,21 @@ import NewGameComponent from './components/NewGameComponent';
 import GameListComponent from './components/GameListComponent';
 import PlayerMoveComponent from './components/PlayerMoveComponent';
 import Utils from './lib/Utils';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import MyCustomTheme from './themes/MyCustomTheme.js';
+import NavBar from './themes/navbar.js';
+import Colors from 'material-ui/lib/styles/colors'
+
+const containerStyles = {
+  width: "100%",
+  textAlign: "center",
+}
+
+const welcomeStyles = {
+  fontWeight: 400,
+  fontSize: "35px",
+  color: Colors.blueGrey900,
+}
 
 class App extends React.Component {
   constructor() {
@@ -24,6 +39,12 @@ class App extends React.Component {
       currentGame: null,
       currentPlayer: playerStorage,
       playerMove: ""
+    };
+  }
+
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getMuiTheme(MyCustomTheme),
     };
   }
 
@@ -131,7 +152,7 @@ class App extends React.Component {
   }
 
   storeWinner(winner) {
-    if (this.state.currentGame.winner !== null) {
+    if (this.state.currentGame.winner === null) {
       this.games.save(this.state.currentGame, { winner: winner });
     }
   }
@@ -188,10 +209,10 @@ class App extends React.Component {
   render() {
     console.log(this.state);
     return (
-      <div style={this.containerStyles()}>
-        <h1 style={this.headerStyle()}>Rock Paper Scissors</h1>
+      <div style={containerStyles}>
+        <NavBar />
         { this.state.currentPlayer !== null &&
-          <p>Hi, {this.state.currentPlayer}</p> }
+          <p style={welcomeStyles}>Hi, {this.state.currentPlayer}</p> }
 
         { this.state.currentPlayer === null &&
           <NewPlayerComponent onCreate={this.setPlayer.bind(this)}/> }
@@ -226,5 +247,9 @@ class App extends React.Component {
     );
   }
 }
+
+App.childContextTypes = {
+  muiTheme: React.PropTypes.object
+};
 
 export default App;
